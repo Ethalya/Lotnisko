@@ -1,0 +1,69 @@
+﻿@page "/edit-reservation/{Id}"
+@layout MainLayout
+@inherits AirlineReservationSystems.Pages.EditReservationComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using AirlineReservationSystems.Models.AirlineReservationSystemsDb
+@using Microsoft.AspNetCore.Identity;
+@using AirlineReservationSystems.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Authenticated, Administrator")]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@reservation" TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Reservation" Visible="@(reservation != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="UserId" style="width: 100%" Text="User Id">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenNumeric style="display: block; width: 100%" @bind-Value="@(reservation.UserId)" Name="UserId">
+                </RadzenNumeric>
+                <RadzenRequiredValidator Component="UserId" style="position: absolute" Text="UserId is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="NoPlaces" style="width: 100%" Text="No Places">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenNumeric style="display: block; width: 100%" @bind-Value="@(reservation.NoPlaces)" Name="NoPlaces">
+                </RadzenNumeric>
+                <RadzenRequiredValidator Component="NoPlaces" style="position: absolute" Text="NoPlaces is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Name" style="width: 100%" Text="Name">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenTextBox style="width: 100%" @bind-Value="@(reservation.Name)" Name="Name">
+                </RadzenTextBox>
+                <RadzenLengthValidator Component="Name" Min="5" style="display: block; position: absolute">
+                </RadzenLengthValidator>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" style="margin-left: 1rem" Text="Cancel" Click="@Button2Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

@@ -1,0 +1,84 @@
+﻿@page "/"
+@page "/flight"
+@layout MainLayout
+@inherits AirlineReservationSystems.Pages.FlightComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using AirlineReservationSystems.Models.AirlineReservationSystemsDb
+@using Microsoft.AspNetCore.Identity;
+@using AirlineReservationSystems.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Authenticated, Administrator")]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Flight">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenDataGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getFlightsResult" FilterMode="FilterMode.Advanced" TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" RowDoubleClick="@Grid0RowDoubleClick" RowSelect="@Grid0RowSelect">
+          <Columns>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" Property="NoFlight" Title="No Flight">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" Property="NoPlane" Title="No Plane">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" FilterProperty="Airport1.Name" Property="InitialAirportId" SortProperty="Airport1.Name" Title="Airport">
+              <Template Context="data">
+              @(data.Airport1?.Name)
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" FilterProperty="Airport.Name" Property="FinalAirportId" SortProperty="Airport.Name" Title="Airport">
+              <Template Context="data">
+              @(data.Airport?.Name)
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" FormatString="{0:d}" Property="Date" Title="Date">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" FormatString="{0:d}" Property="FinalDate" Title="Final Date">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" Property="Places" Title="Places">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" Property="FreePlaces" Title="Free Places">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="airlineReservationSystemsModelsAirlineReservationSystemsDbFlight">
+                <RadzenButton ButtonStyle="ButtonStyle.Info" Icon="create" Size="ButtonSize.Small" Click="@((args) =>Button1Click(args, airlineReservationSystemsModelsAirlineReservationSystemsDbFlight))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="airlineReservationSystemsModelsAirlineReservationSystemsDbFlight">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, airlineReservationSystemsModelsAirlineReservationSystemsDbFlight))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+        <RadzenHeading Size="H1" Text="Reservations">
+        </RadzenHeading>
+        <RadzenButton Disabled="@(this.master == null)" Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@ReservationAddButtonClick">
+        </RadzenButton>
+        <RadzenDataGrid @ref="grid1" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@Reservations" FilterMode="FilterMode.Advanced" TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Reservation" RowSelect="@Grid1RowSelect">
+          <Columns>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Reservation" Property="UserId" Title="User Id">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Reservation" Property="NoPlaces" Title="No Places">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Reservation" Property="Name" Title="Name">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Reservation" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+              <Template Context="airlineReservationSystemsModelsAirlineReservationSystemsDbReservation">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>ReservationDeleteButtonClick(args, airlineReservationSystemsModelsAirlineReservationSystemsDbReservation))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

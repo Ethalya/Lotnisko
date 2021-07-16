@@ -1,0 +1,52 @@
+﻿@page "/flight-client"
+@layout MainLayout
+@inherits AirlineReservationSystems.Pages.FlightClientComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using AirlineReservationSystems.Models.AirlineReservationSystemsDb
+@using Microsoft.AspNetCore.Identity;
+@using AirlineReservationSystems.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Authenticated, Administrator, Klient")]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenDatePicker DateFormat="yyyy/MM/dd" ShowTimeOkButton="false" style="margin-bottom: 10px" Name="Datepicker0" TValue="dynamic" Change="@Datepicker0Change">
+        </RadzenDatePicker>
+        <RadzenDataGrid @ref="grid0" AllowFiltering="true" AllowPaging="true" AllowSorting="true" Data="@getFlightsResult" FilterMode="FilterMode.Simple" TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" RowSelect="@Grid0RowSelect">
+          <Columns>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" Property="NoFlight" Title="No Flight">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" Property="NoPlane" Title="No Plane">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" FilterProperty="Airport1.Name" Property="InitialAirportId" SortProperty="Airport1.Name" Title="Airport">
+              <Template Context="data">
+              @(data.Airport1?.Name)
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" FilterProperty="Airport.Name" Property="FinalAirportId" SortProperty="Airport.Name" Title="Airport">
+              <Template Context="data">
+              @(data.Airport?.Name)
+              </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" FormatString="{0:g}" Property="Date" Title="Date">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" FormatString="{0:g}" Property="FinalDate" Title="Final Date">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" Property="FreePlaces" Title="Free Places">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" Title="Time(Hours)">
+              <Template Context="data">
+              @((data.FinalDate - data.Date).TotalHours)
+              </Template>
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

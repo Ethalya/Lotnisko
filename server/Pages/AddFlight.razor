@@ -1,0 +1,125 @@
+﻿@page "/add-flight"
+@layout MainLayout
+@inherits AirlineReservationSystems.Pages.AddFlightComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using AirlineReservationSystems.Models.AirlineReservationSystemsDb
+@using Microsoft.AspNetCore.Identity;
+@using AirlineReservationSystems.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Administrator")]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenTemplateForm Data="@flight" TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight" Visible="@(flight != null)" Submit="@Form0Submit">
+          <ChildContent>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="NoFlight" style="width: 100%" Text="No Flight">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenNumeric style="display: block; width: 100%" @bind-Value="@(flight.NoFlight)" Name="NoFlight">
+                </RadzenNumeric>
+                <RadzenRequiredValidator Component="NoFlight" style="position: absolute" Text="NoFlight is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="NoPlane" style="width: 100%" Text="No Plane">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenNumeric style="display: block; width: 100%" @bind-Value="@(flight.NoPlane)" Name="NoPlane">
+                </RadzenNumeric>
+                <RadzenRequiredValidator Component="NoPlane" style="position: absolute" Text="NoPlane is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="InitialAirportId" style="width: 100%" Text="Airport">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenDropDown Data="@getAirportsResult" Placeholder="Choose Airport" style="width: 100%" TextProperty="Name" @bind-Value="@(flight.InitialAirportId)" ValueProperty="Id" Name="InitialAirportId">
+                </RadzenDropDown>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="FinalAirportId" style="width: 100%" Text="Airport">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenDropDown Data="@getAirportsResult" Placeholder="Choose Airport" style="width: 100%" TextProperty="Name" @bind-Value="@(flight.FinalAirportId)" ValueProperty="Id" Name="FinalAirportId">
+                </RadzenDropDown>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Date" style="width: 100%" Text="Date">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenDatePicker ShowTime="true" ShowTimeOkButton="false" style="display: block; width: 100%" @bind-Value="@(flight.Date)" Name="Date">
+                </RadzenDatePicker>
+                <RadzenRequiredValidator Component="Date" style="position: absolute" Text="Date is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="FinalDate" style="width: 100%" Text="Final Date">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenDatePicker ShowTime="true" ShowTimeOkButton="false" style="display: block; width: 100%" @bind-Value="@(flight.FinalDate)" Name="FinalDate">
+                </RadzenDatePicker>
+                <RadzenRequiredValidator Component="FinalDate" style="position: absolute" Text="FinalDate is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="Places" style="width: 100%" Text="Places">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenNumeric style="display: block; width: 100%" @bind-Value="@(flight.Places)" Name="Places">
+                </RadzenNumeric>
+                <RadzenRequiredValidator Component="Places" style="position: absolute" Text="Places is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem" class="row">
+              <div class="col-md-3">
+                <RadzenLabel Component="FreePlaces" style="width: 100%" Text="Free Places">
+                </RadzenLabel>
+              </div>
+              <div class="col-md-9">
+                <RadzenNumeric style="display: block; width: 100%" @bind-Value="@(flight.FreePlaces)" Name="FreePlaces">
+                </RadzenNumeric>
+                <RadzenRequiredValidator Component="FreePlaces" style="position: absolute" Text="FreePlaces is required">
+                </RadzenRequiredValidator>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col offset-sm-3">
+                <RadzenButton ButtonStyle="ButtonStyle.Primary" ButtonType="ButtonType.Submit" Icon="save" Text="Save">
+                </RadzenButton>
+                <RadzenButton ButtonStyle="ButtonStyle.Light" style="margin-left: 1rem" Text="Cancel" Click="@Button2Click">
+                </RadzenButton>
+              </div>
+            </div>
+          </ChildContent>
+        </RadzenTemplateForm>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>

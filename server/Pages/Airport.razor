@@ -1,0 +1,39 @@
+﻿@page "/airport"
+@layout MainLayout
+@inherits AirlineReservationSystems.Pages.AirportComponent
+
+@using Radzen
+@using Radzen.Blazor
+@using AirlineReservationSystems.Models.AirlineReservationSystemsDb
+@using Microsoft.AspNetCore.Identity;
+@using AirlineReservationSystems.Models
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles="Administrator")]
+
+
+<RadzenContent Container="main">
+  <ChildContent>
+    <RadzenHeading Size="H1" Text="Airport">
+    </RadzenHeading>
+    <div class="row">
+      <div class="col-md-12">
+        <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@Button0Click">
+        </RadzenButton>
+        <RadzenDataGrid @ref="grid0" AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true" Data="@getAirportsResult" TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Airport" RowSelect="@Grid0RowSelect">
+          <Columns>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Airport" Property="Id" Title="Id">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Airport" Property="Name" Title="Name">
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="AirlineReservationSystems.Models.AirlineReservationSystemsDb.Airport" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+              <Template Context="airlineReservationSystemsModelsAirlineReservationSystemsDbAirport">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@((args) =>GridDeleteButtonClick(args, airlineReservationSystemsModelsAirlineReservationSystemsDbAirport))" @onclick:stopPropagation="true">
+                </RadzenButton>
+              </Template>
+            </RadzenDataGridColumn>
+          </Columns>
+        </RadzenDataGrid>
+      </div>
+    </div>
+  </ChildContent>
+</RadzenContent>
