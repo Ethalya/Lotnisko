@@ -1,0 +1,400 @@
+{
+  "access": [
+    "Authenticated",
+    "Administrator"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "name": "pageTitle",
+          "size": "H1",
+          "text": "Flight",
+          "type": "heading"
+        },
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "events": {
+                    "click": [
+                      {
+                        "path": "add-flight",
+                        "then": [
+                          {
+                            "code": "await grid0.Reload();",
+                            "type": "execute"
+                          },
+                          {
+                            "code": "await InvokeAsync(() => { StateHasChanged(); });",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "popup"
+                      }
+                    ]
+                  },
+                  "icon": "add_circle_outline",
+                  "name": "button0",
+                  "style": {
+                    "marginBottom": "10px"
+                  },
+                  "text": "Add",
+                  "type": "button"
+                },
+                {
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "columns": [
+                    {
+                      "property": "NoFlight",
+                      "title": "No Flight"
+                    },
+                    {
+                      "property": "NoPlane",
+                      "title": "No Plane"
+                    },
+                    {
+                      "filterProperty": "Airport1.Name",
+                      "property": "InitialAirportId",
+                      "sortProperty": "Airport1.Name",
+                      "template": "${data.Airport1?.Name}",
+                      "title": "Airport"
+                    },
+                    {
+                      "filterProperty": "Airport.Name",
+                      "property": "FinalAirportId",
+                      "sortProperty": "Airport.Name",
+                      "template": "${data.Airport?.Name}",
+                      "title": "Airport"
+                    },
+                    {
+                      "formatString": "{0:d}",
+                      "property": "Date",
+                      "title": "Date"
+                    },
+                    {
+                      "formatString": "{0:d}",
+                      "property": "FinalDate",
+                      "title": "Final Date"
+                    },
+                    {
+                      "property": "Places",
+                      "title": "Places"
+                    },
+                    {
+                      "property": "FreePlaces",
+                      "title": "Free Places"
+                    },
+                    {
+                      "filterTemplate": "",
+                      "filterable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "@onclick:stopPropagation",
+                              "value": "true"
+                            }
+                          ],
+                          "buttonStyle": "info",
+                          "events": {
+                            "click": [
+                              {
+                                "parameters": [
+                                  {
+                                    "name": "Id",
+                                    "value": "${data.Id}"
+                                  }
+                                ],
+                                "path": "edit-flight",
+                                "type": "popup"
+                              }
+                            ]
+                          },
+                          "icon": "create",
+                          "name": "button1",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "width": "70px"
+                    },
+                    {
+                      "filterable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "@onclick:stopPropagation",
+                              "value": true
+                            }
+                          ],
+                          "buttonStyle": "danger",
+                          "events": {
+                            "click": [
+                              {
+                                "condition": "await DialogService.Confirm(\"Are you sure you want to delete this record?\") == true",
+                                "error": [
+                                  {
+                                    "detail": "Unable to delete Flight",
+                                    "severity": "error",
+                                    "summary": "Error",
+                                    "type": "notify"
+                                  }
+                                ],
+                                "name": "AirlineReservationSystemsDB.deleteFlight",
+                                "parameters": [
+                                  {
+                                    "name": "Id",
+                                    "value": "${data.Id}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "code": "await grid0.Reload();",
+                                    "condition": "result != null",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          },
+                          "icon": "close",
+                          "name": "gridDeleteButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "width": "70px"
+                    }
+                  ],
+                  "data": "${getFlightsResult}",
+                  "events": {
+                    "loadData": [],
+                    "rowDoubleClick": [
+                      {
+                        "parameters": [
+                          {
+                            "name": "Id",
+                            "value": "${event.Data.Id}"
+                          }
+                        ],
+                        "path": "edit-flight",
+                        "type": "popup"
+                      }
+                    ],
+                    "rowSelect": [
+                      {
+                        "name": "master",
+                        "type": "set",
+                        "value": "${event}",
+                        "valueType": "AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight"
+                      },
+                      {
+                        "name": "AirlineReservationSystemsDB.getReservations",
+                        "parameters": [
+                          {
+                            "name": "$filter",
+                            "value": "i => i.FlightId == ${event.Id}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "name": "Reservations",
+                            "type": "set",
+                            "value": "${result}",
+                            "valueType": "IEnumerable<AirlineReservationSystems.Models.AirlineReservationSystemsDb.Reservation>"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "filterMode": "advanced",
+                  "itemType": "AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight",
+                  "name": "grid0",
+                  "title": "",
+                  "type": "datagrid"
+                },
+                {
+                  "name": "heading1",
+                  "size": "H1",
+                  "text": "Reservations",
+                  "type": "heading"
+                },
+                {
+                  "disabled": "${this.master == null}",
+                  "events": {
+                    "click": [
+                      {
+                        "parameters": [
+                          {
+                            "name": "FlightId",
+                            "type": "integer",
+                            "value": "${master.Id}"
+                          }
+                        ],
+                        "path": "add-reservation",
+                        "then": [
+                          {
+                            "code": "await grid1.Reload();",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "popup"
+                      }
+                    ]
+                  },
+                  "icon": "add_circle_outline",
+                  "name": "ReservationAddButton",
+                  "style": {
+                    "marginBottom": "10px"
+                  },
+                  "text": "Add",
+                  "type": "button"
+                },
+                {
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "columns": [
+                    {
+                      "property": "UserId",
+                      "title": "User Id"
+                    },
+                    {
+                      "property": "NoPlaces",
+                      "title": "No Places"
+                    },
+                    {
+                      "format": "",
+                      "property": "Name",
+                      "title": "Name",
+                      "type": "string"
+                    },
+                    {
+                      "filterable": false,
+                      "sortable": false,
+                      "template": [
+                        {
+                          "attributes": [
+                            {
+                              "name": "@onclick:stopPropagation",
+                              "value": true
+                            }
+                          ],
+                          "buttonStyle": "danger",
+                          "events": {
+                            "click": [
+                              {
+                                "condition": "await DialogService.Confirm(\"Are you sure you want to delete this record?\") == true",
+                                "error": [
+                                  {
+                                    "detail": "Unable to delete Flight",
+                                    "severity": "error",
+                                    "summary": "Error",
+                                    "type": "notify"
+                                  }
+                                ],
+                                "name": "AirlineReservationSystemsDB.deleteReservation",
+                                "parameters": [
+                                  {
+                                    "name": "Id",
+                                    "value": "${data.Id}"
+                                  }
+                                ],
+                                "then": [
+                                  {
+                                    "code": "await grid1.Reload();",
+                                    "condition": "result != null",
+                                    "type": "execute"
+                                  }
+                                ],
+                                "type": "invoke"
+                              }
+                            ]
+                          },
+                          "icon": "close",
+                          "name": "ReservationDeleteButton",
+                          "size": "sm",
+                          "text": "",
+                          "type": "button"
+                        }
+                      ],
+                      "textAlign": "center",
+                      "width": "70px"
+                    }
+                  ],
+                  "data": "${Reservations}",
+                  "events": {
+                    "rowSelect": [
+                      {
+                        "parameters": [
+                          {
+                            "name": "Id",
+                            "value": "${event.Id}"
+                          }
+                        ],
+                        "path": "edit-reservation",
+                        "then": [
+                          {
+                            "code": "await grid1.Reload();",
+                            "type": "execute"
+                          }
+                        ],
+                        "type": "popup"
+                      }
+                    ]
+                  },
+                  "filterMode": "advanced",
+                  "itemType": "AirlineReservationSystems.Models.AirlineReservationSystemsDb.Reservation",
+                  "name": "grid1",
+                  "type": "datagrid"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "AirlineReservationSystemsDB.getFlights",
+        "parameters": [
+          {
+            "name": "$expand",
+            "value": "Airport1,Airport"
+          }
+        ],
+        "then": [
+          {
+            "name": "getFlightsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Flight"
+}

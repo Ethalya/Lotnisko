@@ -1,0 +1,495 @@
+{
+  "access": [
+    "Administrator"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "components": [
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "NoFlight",
+                              "name": "NoFlightLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "No Flight",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "name": "NoFlight",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "numeric",
+                              "value": "${flight.NoFlight}",
+                              "valueType": "int"
+                            },
+                            {
+                              "component": "NoFlight",
+                              "name": "NoFlightRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "NoFlight is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "NoPlane",
+                              "name": "NoPlaneLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "No Plane",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "name": "NoPlane",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "numeric",
+                              "value": "${flight.NoPlane}",
+                              "valueType": "int"
+                            },
+                            {
+                              "component": "NoPlane",
+                              "name": "NoPlaneRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "NoPlane is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "InitialAirportId",
+                              "name": "InitialAirportIdLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Airport",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getAirportsResult}",
+                              "name": "InitialAirportId",
+                              "placeholder": "Choose Airport",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "textProperty": "Name",
+                              "type": "dropdown",
+                              "value": "${flight.InitialAirportId}",
+                              "valueProperty": "Id",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "FinalAirportId",
+                              "name": "FinalAirportIdLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Airport",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "data": "${getAirportsResult}",
+                              "name": "FinalAirportId",
+                              "placeholder": "Choose Airport",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "textProperty": "Name",
+                              "type": "dropdown",
+                              "value": "${flight.FinalAirportId}",
+                              "valueProperty": "Id",
+                              "valueType": "int?"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Date",
+                              "name": "DateLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Date",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "name": "Date",
+                              "showTime": true,
+                              "showTimeOkButton": false,
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "datepicker",
+                              "value": "${flight.Date}",
+                              "valueType": "DateTime"
+                            },
+                            {
+                              "component": "Date",
+                              "name": "DateRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Date is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "FinalDate",
+                              "name": "FinalDateLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Final Date",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "name": "FinalDate",
+                              "showTime": true,
+                              "showTimeOkButton": false,
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "datepicker",
+                              "value": "${flight.FinalDate}",
+                              "valueType": "DateTime"
+                            },
+                            {
+                              "component": "FinalDate",
+                              "name": "FinalDateRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "FinalDate is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "Places",
+                              "name": "PlacesLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Places",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "name": "Places",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "numeric",
+                              "value": "${flight.Places}",
+                              "valueType": "int"
+                            },
+                            {
+                              "component": "Places",
+                              "name": "PlacesRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "Places is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col-md-3",
+                          "components": [
+                            {
+                              "component": "FreePlaces",
+                              "name": "FreePlacesLabel",
+                              "style": {
+                                "width": "100%"
+                              },
+                              "text": "Free Places",
+                              "type": "label"
+                            }
+                          ],
+                          "type": "col"
+                        },
+                        {
+                          "class": "col-md-9",
+                          "components": [
+                            {
+                              "name": "FreePlaces",
+                              "style": {
+                                "display": "block",
+                                "width": "100%"
+                              },
+                              "type": "numeric",
+                              "value": "${flight.FreePlaces}",
+                              "valueType": "int"
+                            },
+                            {
+                              "component": "FreePlaces",
+                              "name": "FreePlacesRequiredValidator",
+                              "style": {
+                                "position": "absolute"
+                              },
+                              "text": "FreePlaces is required",
+                              "type": "required-validator"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "style": {
+                        "marginBottom": "1rem"
+                      },
+                      "type": "row"
+                    },
+                    {
+                      "components": [
+                        {
+                          "class": "col offset-sm-3",
+                          "components": [
+                            {
+                              "buttonStyle": "primary",
+                              "buttonType": "submit",
+                              "icon": "save",
+                              "text": "Save",
+                              "type": "button"
+                            },
+                            {
+                              "buttonStyle": "light",
+                              "events": {
+                                "click": [
+                                  {
+                                    "type": "close-popup"
+                                  }
+                                ]
+                              },
+                              "style": {
+                                "marginLeft": "1rem"
+                              },
+                              "text": "Cancel",
+                              "type": "button"
+                            }
+                          ],
+                          "type": "col"
+                        }
+                      ],
+                      "type": "row"
+                    }
+                  ],
+                  "data": "${flight}",
+                  "events": {
+                    "submit": [
+                      {
+                        "error": [
+                          {
+                            "detail": "Unable to create new Flight!",
+                            "severity": "error",
+                            "summary": "Error",
+                            "type": "notify"
+                          }
+                        ],
+                        "name": "AirlineReservationSystemsDB.createFlight",
+                        "parameters": [
+                          {
+                            "name": "Flight",
+                            "value": "${flight}"
+                          }
+                        ],
+                        "then": [
+                          {
+                            "result": "${flight}",
+                            "type": "close-popup"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "itemType": "AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight",
+                  "name": "form0",
+                  "type": "template-form",
+                  "visible": "${flight != null}"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "AirlineReservationSystemsDB.getAirports",
+        "parameters": [],
+        "then": [
+          {
+            "name": "getAirportsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<AirlineReservationSystems.Models.AirlineReservationSystemsDb.Airport>"
+          }
+        ],
+        "type": "invoke"
+      },
+      {
+        "name": "flight",
+        "type": "set",
+        "value": "new AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight(){}",
+        "valueType": "AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "Add Flight"
+}

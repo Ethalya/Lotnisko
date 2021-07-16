@@ -1,0 +1,180 @@
+{
+  "access": [
+    "Authenticated",
+    "Administrator",
+    "Klient"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "class": "col-md-12",
+              "components": [
+                {
+                  "dateFormat": "yyyy/MM/dd",
+                  "events": {
+                    "change": [
+                      {
+                        "name": "AirlineReservationSystemsDB.getFlights",
+                        "parameters": [
+                          {
+                            "name": "$expand",
+                            "value": "Airport1,Airport"
+                          },
+                          {
+                            "name": "$filter",
+                            "operator": "and",
+                            "value": [
+                              {
+                                "format": "date-time",
+                                "operation": "eq",
+                                "property": "Date",
+                                "type": "string",
+                                "value": "${event.Value.Date}"
+                              }
+                            ]
+                          }
+                        ],
+                        "then": [
+                          {
+                            "name": "getFlightsResult",
+                            "type": "set",
+                            "value": "${result}",
+                            "valueType": "IEnumerable<AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight>"
+                          }
+                        ],
+                        "type": "invoke"
+                      }
+                    ]
+                  },
+                  "name": "datepicker0",
+                  "placeholder": "",
+                  "showTimeOkButton": false,
+                  "style": {
+                    "marginBottom": "10px"
+                  },
+                  "type": "datepicker",
+                  "value": ""
+                },
+                {
+                  "allowFiltering": true,
+                  "allowPaging": true,
+                  "allowSorting": true,
+                  "columns": [
+                    {
+                      "property": "NoFlight",
+                      "title": "No Flight"
+                    },
+                    {
+                      "property": "NoPlane",
+                      "title": "No Plane"
+                    },
+                    {
+                      "filterProperty": "Airport1.Name",
+                      "property": "InitialAirportId",
+                      "sortProperty": "Airport1.Name",
+                      "template": "${data.Airport1?.Name}",
+                      "title": "Airport"
+                    },
+                    {
+                      "filterProperty": "Airport.Name",
+                      "property": "FinalAirportId",
+                      "sortProperty": "Airport.Name",
+                      "template": "${data.Airport?.Name}",
+                      "title": "Airport"
+                    },
+                    {
+                      "formatString": "{0:d}",
+                      "property": "Date",
+                      "title": "Date"
+                    },
+                    {
+                      "formatString": "{0:d}",
+                      "property": "FinalDate",
+                      "title": "Final Date"
+                    },
+                    {
+                      "property": "FreePlaces",
+                      "title": "Free Places"
+                    },
+                    {
+                      "filterTemplate": "",
+                      "format": "",
+                      "template": "${(data.FinalDate - data.Date).TotalHours}",
+                      "title": "Time(Hours)",
+                      "type": "integer"
+                    }
+                  ],
+                  "data": "${getFlightsResult}",
+                  "events": {
+                    "loadData": [],
+                    "rowSelect": [
+                      {
+                        "parameters": [
+                          {
+                            "name": "FlightId",
+                            "value": "${event.Id}"
+                          }
+                        ],
+                        "path": "flight-buy",
+                        "type": "popup"
+                      }
+                    ]
+                  },
+                  "filterMode": "simple",
+                  "itemType": "AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight",
+                  "name": "grid0",
+                  "title": "",
+                  "type": "datagrid"
+                }
+              ],
+              "type": "col"
+            }
+          ],
+          "type": "row"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "name": "AirlineReservationSystemsDB.getFlights",
+        "parameters": [
+          {
+            "name": "$expand",
+            "value": "Airport1,Airport"
+          },
+          {
+            "name": "$filter",
+            "operator": "and",
+            "value": [
+              {
+                "format": "date-time",
+                "operation": "eq",
+                "property": "Date",
+                "type": "string",
+                "value": "DateTime.Now.Date"
+              }
+            ]
+          }
+        ],
+        "then": [
+          {
+            "name": "getFlightsResult",
+            "type": "set",
+            "value": "${result}",
+            "valueType": "IEnumerable<AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight>"
+          }
+        ],
+        "type": "invoke"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "FlightClient"
+}

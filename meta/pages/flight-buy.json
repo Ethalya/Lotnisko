@@ -1,0 +1,269 @@
+{
+  "access": [
+    "Authenticated",
+    "Administrator",
+    "Klient"
+  ],
+  "components": [
+    {
+      "components": [
+        {
+          "components": [
+            {
+              "components": [
+                {
+                  "class": "col-md-3",
+                  "components": [
+                    {
+                      "component": "NoPlaces",
+                      "name": "NoPlacesLabel",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "text": "No Places",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col2",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-9",
+                  "components": [
+                    {
+                      "name": "NoPlaces",
+                      "style": {
+                        "display": "block",
+                        "width": "100%"
+                      },
+                      "type": "numeric",
+                      "value": "${reservation.NoPlaces}",
+                      "valueType": "int"
+                    },
+                    {
+                      "component": "NoPlaces",
+                      "name": "NoPlacesRequiredValidator",
+                      "style": {
+                        "position": "absolute"
+                      },
+                      "text": "NoPlaces is required",
+                      "type": "required-validator"
+                    }
+                  ],
+                  "name": "col3",
+                  "type": "col"
+                }
+              ],
+              "name": "row1",
+              "style": {
+                "marginBottom": "1rem"
+              },
+              "type": "row"
+            },
+            {
+              "components": [
+                {
+                  "class": "col-md-3",
+                  "components": [
+                    {
+                      "component": "Name",
+                      "name": "label0",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "text": "Name",
+                      "type": "label"
+                    }
+                  ],
+                  "name": "col4",
+                  "type": "col"
+                },
+                {
+                  "class": "col-md-9",
+                  "components": [
+                    {
+                      "name": "Name",
+                      "style": {
+                        "width": "100%"
+                      },
+                      "type": "textbox",
+                      "value": "${reservation.Name}"
+                    },
+                    {
+                      "component": "Name",
+                      "min": 5,
+                      "name": "lengthValidator0",
+                      "style": {
+                        "display": "block",
+                        "position": "absolute"
+                      },
+                      "type": "length-validator"
+                    }
+                  ],
+                  "name": "col5",
+                  "type": "col"
+                }
+              ],
+              "name": "row2",
+              "style": {
+                "marginBottom": "1rem"
+              },
+              "type": "row"
+            },
+            {
+              "components": [
+                {
+                  "class": "col offset-sm-3",
+                  "components": [
+                    {
+                      "buttonStyle": "primary",
+                      "buttonType": "submit",
+                      "icon": "save",
+                      "name": "button0",
+                      "text": "Save",
+                      "type": "button"
+                    },
+                    {
+                      "buttonStyle": "light",
+                      "events": {
+                        "click": [
+                          {
+                            "type": "close-popup"
+                          }
+                        ]
+                      },
+                      "name": "button1",
+                      "style": {
+                        "marginLeft": "1rem"
+                      },
+                      "text": "Cancel",
+                      "type": "button"
+                    }
+                  ],
+                  "name": "col6",
+                  "type": "col"
+                }
+              ],
+              "name": "row3",
+              "type": "row"
+            }
+          ],
+          "data": "${reservation}",
+          "events": {
+            "submit": [
+              {
+                "name": "AirlineReservationSystemsDB.getFlightById",
+                "parameters": [
+                  {
+                    "name": "Id",
+                    "value": "${parameters.FlightId}"
+                  }
+                ],
+                "then": [
+                  {
+                    "name": "places",
+                    "type": "set",
+                    "value": "${result}",
+                    "valueType": "AirlineReservationSystems.Models.AirlineReservationSystemsDb.Flight"
+                  },
+                  {
+                    "name": "FreePlaces",
+                    "type": "set",
+                    "value": "${result.FreePlaces}",
+                    "valueType": "int"
+                  },
+                  {
+                    "name": "places.FreePlaces",
+                    "type": "set",
+                    "value": "${places.FreePlaces} - ${reservation.NoPlaces}",
+                    "valueType": "dynamic"
+                  },
+                  {
+                    "condition": "${places.FreePlaces} >= 0",
+                    "error": [
+                      {
+                        "detail": "Unable to update Reservation",
+                        "duration": "",
+                        "severity": "error",
+                        "summary": "Error",
+                        "type": "notify"
+                      }
+                    ],
+                    "name": "AirlineReservationSystemsDB.createReservation",
+                    "parameters": [
+                      {
+                        "name": "Reservation",
+                        "value": "${reservation}"
+                      }
+                    ],
+                    "then": [
+                      {
+                        "error": [],
+                        "name": "AirlineReservationSystemsDB.updateFlight",
+                        "parameters": [
+                          {
+                            "name": "Id",
+                            "value": "${places.Id}"
+                          },
+                          {
+                            "name": "Flight",
+                            "value": "${places}"
+                          }
+                        ],
+                        "type": "invoke"
+                      },
+                      {
+                        "result": "${reservation}",
+                        "type": "close-popup"
+                      }
+                    ],
+                    "type": "invoke"
+                  },
+                  {
+                    "condition": "${FreePlaces} < ${reservation.NoPlaces}",
+                    "detail": "We only have ${FreePlaces} vacancies.",
+                    "duration": 2000,
+                    "severity": "info",
+                    "type": "notify"
+                  }
+                ],
+                "type": "invoke"
+              }
+            ]
+          },
+          "itemType": "AirlineReservationSystems.Models.AirlineReservationSystemsDb.Reservation",
+          "name": "form0",
+          "type": "template-form",
+          "visible": "${reservation != null}"
+        }
+      ],
+      "container": "main",
+      "type": "content"
+    }
+  ],
+  "events": {
+    "load": [
+      {
+        "global": false,
+        "name": "reservation",
+        "type": "set",
+        "value": "new AirlineReservationSystems.Models.AirlineReservationSystemsDb.Reservation()",
+        "valueType": "AirlineReservationSystems.Models.AirlineReservationSystemsDb.Reservation"
+      },
+      {
+        "name": "reservation.UserId",
+        "type": "set",
+        "value": "${Security.User.Id}",
+        "valueType": "dynamic"
+      },
+      {
+        "name": "reservation.FlightId",
+        "type": "set",
+        "value": "${parameters.FlightId}",
+        "valueType": "dynamic"
+      }
+    ]
+  },
+  "layout": "Main",
+  "name": "FlightBuy"
+}

@@ -1,0 +1,707 @@
+{
+  "info": {
+    "title": "AirlineReservationSystemsDB",
+    "x-type": "odata",
+    "x-connector": "mssql",
+    "x-connector-version": 13
+  },
+  "definitions": {
+    "Airport": {
+      "x-table": "dbo.Airport",
+      "resource": "Airports",
+      "required": [
+        "Name"
+      ],
+      "properties": {
+        "Id": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "x-precision": 10,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Airport",
+              "name": "Flights",
+              "type": "Flight"
+            },
+            {
+              "inversePropertyName": "Airport1",
+              "name": "Flights1",
+              "type": "Flight"
+            }
+          ]
+        },
+        "Name": {
+          "x-nullable": false,
+          "type": "string"
+        },
+        "Flights": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Flight"
+          }
+        }
+      }
+    },
+    "Flight": {
+      "x-table": "dbo.Flight",
+      "resource": "Flights",
+      "required": [
+        "NoFlight",
+        "NoPlane",
+        "Date",
+        "FinalDate",
+        "Places",
+        "FreePlaces"
+      ],
+      "properties": {
+        "Id": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "x-precision": 10,
+          "type": "integer",
+          "x-navigation": [
+            {
+              "inversePropertyName": "Flight",
+              "name": "Reservations",
+              "type": "Reservation"
+            }
+          ]
+        },
+        "NoFlight": {
+          "x-nullable": false,
+          "x-precision": 10,
+          "type": "integer"
+        },
+        "NoPlane": {
+          "x-nullable": false,
+          "x-precision": 10,
+          "type": "integer"
+        },
+        "Airport1": {
+          "type": "object",
+          "$ref": "#/definitions/Airport"
+        },
+        "InitialAirportId": {
+          "x-precision": 10,
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Airport",
+            "parentEntityType": "Airport",
+            "type": "Airport",
+            "principalKey": "Id",
+            "name": "Airport1",
+            "textProperty": "Name",
+            "navigationProperty": "Flights1"
+          }
+        },
+        "Airport": {
+          "type": "object",
+          "$ref": "#/definitions/Airport"
+        },
+        "FinalAirportId": {
+          "x-precision": 10,
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Airport",
+            "parentEntityType": "Airport",
+            "type": "Airport",
+            "principalKey": "Id",
+            "name": "Airport",
+            "textProperty": "Name",
+            "navigationProperty": "Flights"
+          }
+        },
+        "Date": {
+          "x-nullable": false,
+          "type": "string",
+          "format": "date-time",
+          "x-datetime": "datetime2"
+        },
+        "FinalDate": {
+          "x-nullable": false,
+          "type": "string",
+          "format": "date-time",
+          "x-datetime": "datetime2"
+        },
+        "Places": {
+          "x-nullable": false,
+          "x-precision": 10,
+          "type": "integer"
+        },
+        "FreePlaces": {
+          "x-nullable": false,
+          "x-precision": 10,
+          "type": "integer"
+        },
+        "Reservations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Reservation"
+          }
+        }
+      }
+    },
+    "Reservation": {
+      "x-table": "dbo.Reservation",
+      "resource": "Reservations",
+      "required": [
+        "UserId",
+        "NoPlaces"
+      ],
+      "properties": {
+        "Id": {
+          "x-key": true,
+          "x-identity": true,
+          "x-nullable": false,
+          "x-precision": 10,
+          "type": "integer"
+        },
+        "UserId": {
+          "x-nullable": false,
+          "type": "string"
+        },
+        "NoPlaces": {
+          "x-nullable": false,
+          "x-precision": 10,
+          "type": "integer"
+        },
+        "Flight": {
+          "type": "object",
+          "$ref": "#/definitions/Flight"
+        },
+        "FlightId": {
+          "x-precision": 10,
+          "type": "integer",
+          "x-foreignKey": {
+            "parentTable": "Flight",
+            "parentEntityType": "Flight",
+            "type": "Flight",
+            "principalKey": "Id",
+            "name": "Flight",
+            "textProperty": "Id",
+            "navigationProperty": "Reservations"
+          }
+        },
+        "Name": {
+          "x-default-sql": "(N'')",
+          "x-nullable": false,
+          "type": "string"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/Airports": {
+      "get": {
+        "operationId": "getAirports",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Airport"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createAirport",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Airport",
+            "schema": {
+              "$ref": "#/definitions/Airport"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Airport"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Flights": {
+      "get": {
+        "operationId": "getFlights",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Flight"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createFlight",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Flight",
+            "schema": {
+              "$ref": "#/definitions/Flight"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Flight"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Reservations": {
+      "get": {
+        "operationId": "getReservations",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "$filter",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$orderby",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$expand",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "$top",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$skip",
+            "type": "integer"
+          },
+          {
+            "in": "query",
+            "name": "$format",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "properties": {
+                "value": {
+                  "items": {
+                    "$ref": "#/definitions/Reservation"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "createReservation",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Reservation",
+            "schema": {
+              "$ref": "#/definitions/Reservation"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "schema": {
+              "$ref": "#/definitions/Reservation"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Airports({Id})": {
+      "delete": {
+        "operationId": "deleteAirport",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getAirportById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Airport"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateAirport",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Airport",
+            "schema": {
+              "$ref": "#/definitions/Airport"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelAirportChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Airport",
+            "schema": {
+              "$ref": "#/definitions/Airport"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Flights({Id})": {
+      "delete": {
+        "operationId": "deleteFlight",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getFlightById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Flight"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateFlight",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Flight",
+            "schema": {
+              "$ref": "#/definitions/Flight"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelFlightChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Flight",
+            "schema": {
+              "$ref": "#/definitions/Flight"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/Reservations({Id})": {
+      "delete": {
+        "operationId": "deleteReservation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getReservationById",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/Reservation"
+            }
+          },
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateReservation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "Id",
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Reservation",
+            "schema": {
+              "$ref": "#/definitions/Reservation"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "cancel": {
+        "operationId": "cancelReservationChanges",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Reservation",
+            "schema": {
+              "$ref": "#/definitions/Reservation"
+            }
+          }
+        ],
+        "responses": {
+          "204": {},
+          "default": {
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "basePath": "/odata/AirlineReservationSystemsDB",
+  "host": "localhost:5000",
+  "schemes": [
+    "http"
+  ]
+}
